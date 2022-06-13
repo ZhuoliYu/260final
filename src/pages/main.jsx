@@ -11,7 +11,7 @@ const MainPage = () => {
     const [listOfCrave, SetCraveList] = useState([]);
     const [listOfDisney, SetDisneyList] = useState([]);
     const [listOfApplePlus, SetApplePlusList] = useState([]);
-    const [moviesSearch, SetMoivesSearch] = useState([]);
+    const [movieToSearch, SetMoivesSearch] = useState([]);
 
     // create useEffect populates(fills) movies from API
     useEffect(()=>{
@@ -24,14 +24,15 @@ const MainPage = () => {
     ]);  /*https://www.javascripttutorial.net/es6/javascript-promise-all/  
     4 functions, when call multiple API, to prevent one of them got error, 
     after finishing all items then return*/
-  }, []);
+  }, []);//this should be changed depends on search movie, every movie serach change, it runs
 
+  var queryData =""; 
   const handleSearch = (query) => {
-
-    SearchMovies(query).then((movies) => SetMoivesSearch(movies.results))
+queryData = query;
+SearchMovies(query).then((movies) => SetMoivesSearch(movies.results))
   };
-
-if (moviesSearch === null){
+console.log(movieToSearch.length)
+if (movieToSearch.length===0){
   return ( 
     <>
     <Header>
@@ -51,7 +52,7 @@ if (moviesSearch === null){
     <Header>
     <Form ResultMovies={handleSearch} />
     </Header>
-    <MoviesList provider="results" movies={moviesSearch}/>
+    <MoviesList provider="results" movies={movieToSearch}/>
     </>
   )
 }
