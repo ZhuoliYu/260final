@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import MoviesList from '../components/MoviesList';
-import {ResultMovies} from '../services/Movie-API';
+import {ResultMovies,SearchMovies} from '../services/Movie-API';
+import Form from '../components/Form';
+
 
 const MainPage = () => {
     //create state to hold movies through useState
@@ -9,6 +11,7 @@ const MainPage = () => {
     const [listOfCrave, SetCraveList] = useState([]);
     const [listOfDisney, SetDisneyList] = useState([]);
     const [listOfApplePlus, SetApplePlusList] = useState([]);
+    const [moviesSearch, SetMoivesSearch] = useState([]);
 
     // create useEffect populates(fills) movies from API
     useEffect(()=>{
@@ -23,14 +26,35 @@ const MainPage = () => {
     after finishing all items then return*/
   }, []);
 
-    return ( 
-        <>
-        <Header />
-        <MoviesList provider="Netflix" movies={listOfNetflix}/>
-        <MoviesList provider="Crave" movies={listOfCrave}/>
-        <MoviesList provider="Disney" movies={listOfDisney}/>
-        <MoviesList provider="Apple Plus" movies={listOfApplePlus}/>
-        </>
-     );
+  const handleSearch = (query) => {
+
+    SearchMovies(query).then((movies) => SetMoivesSearch(movies.results))
+  };
+
+if (moviesSearch === null){
+  return ( 
+    <>
+    <Header>
+    <Form ResultMovies={handleSearch} />
+    </Header>
+
+    <MoviesList provider="Netflix" movies={listOfNetflix}/>
+    <MoviesList provider="Crave" movies={listOfCrave}/>
+    <MoviesList provider="Disney" movies={listOfDisney}/>
+    <MoviesList provider="Apple Plus" movies={listOfApplePlus}/>
+    </>
+ );
+
+}else {
+  return(
+    <>
+    <Header>
+    <Form ResultMovies={handleSearch} />
+    </Header>
+    <MoviesList provider="results" movies={moviesSearch}/>
+    </>
+  )
+}
+   
 }
 export default MainPage;

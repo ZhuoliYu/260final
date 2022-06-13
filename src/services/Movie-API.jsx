@@ -14,7 +14,7 @@ export const ResultMovies = async (providerId) => {
     return Movies;
   };
   //query String required
-  export const SearchedResult = async (query) => {
+  export const SearchMovies = async (query) => {
     const response = await fetch(`${SEARCH_URL}${query}`);
     const Movies = await response.json();
     return Movies;
