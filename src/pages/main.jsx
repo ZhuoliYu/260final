@@ -13,6 +13,10 @@ const MainPage = () => {
     const [listOfApplePlus, SetApplePlusList] = useState([]);
     const [movieToSearch, SetMoivesSearch] = useState([]);
 
+    //checkedmoviepart shortcut usf
+    const initialWatchedMovies = JSON.parse(localStorage.getItem('watchedMovies'));
+    const [watchedMovies, setWatchedMovies] = useState(initialWatchedMovies || []);
+
     // create useEffect populates(fills) movies from API
     useEffect(()=>{
     /*with_watch_provider id Netflix (id: 8)Crave (id: 230)Disney (id: 337)Apple Plus (id: 350)  */
@@ -25,6 +29,24 @@ const MainPage = () => {
     4 functions, when call multiple API, to prevent one of them got error, 
     after finishing all items then return*/
   }, []);//this should be changed depends on search movie, every movie serach change, it runs
+
+  useEffect(() => {
+    localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies));
+
+  }, [watchedMovies]);
+
+  //handle watched movie (checked)
+  const handleToggleWatchMovie = id => {
+    // console.log("toggle movie", id);
+    //add or remove the movie id to watchedMovies
+    setWatchedMovies(prevState =>{
+      if( prevState.findIndex(movieId => movieId=== id)=== -1) {
+        return [...prevState, id];// cuz push will modify state
+      }
+      return prevState.filter(movieId => movieId !== id);
+    });
+    // console.log(watchedMovies);
+  };
 
   var queryData =""; 
   const handleSearch = (query) => {
@@ -39,10 +61,11 @@ if (movieToSearch.length===0){
     <Form ResultMovies={handleSearch} />
     </Header>
 
-    <MoviesList provider="Netflix" movies={listOfNetflix}/>
-    <MoviesList provider="Crave" movies={listOfCrave}/>
-    <MoviesList provider="Disney" movies={listOfDisney}/>
-    <MoviesList provider="Apple Plus" movies={listOfApplePlus}/>
+    <MoviesList provider="Netflix" movies={listOfNetflix} toggleWatchMovie={handleToggleWatchMovie} 
+    watchedMovies={watchedMovies}/>
+    <MoviesList provider="Crave" movies={listOfCrave} watchedMovies={watchedMovies}/>
+    <MoviesList provider="Disney" movies={listOfDisney} watchedMovies={watchedMovies}/>
+    <MoviesList provider="Apple Plus" movies={listOfApplePlus} watchedMovies={watchedMovies}/>
     </>
  );
 
@@ -52,7 +75,8 @@ if (movieToSearch.length===0){
     <Header>
     <Form ResultMovies={handleSearch} />
     </Header>
-    <MoviesList provider="results" movies={movieToSearch}/>
+    <MoviesList provider="results" movies={movieToSearch} 
+    watchedMovies={watchedMovies} toggleWatchMovie={handleToggleWatchMovie}/>
     </>
   )
 }

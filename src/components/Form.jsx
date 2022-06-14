@@ -13,9 +13,9 @@ const handleChange = (event) => {
         event.preventDefault();//triger searchMovies when submit, happen in App component
         ResultMovies(searchValue);
         //clear the form
-        setSearchValue(''); //just set an empty string
+        setSearchValue(""); //just set an empty string
 
-    }
+    };
 
     return ( 
         <form onSubmit={handleSubmit} id="search" className="search">
