@@ -5,13 +5,33 @@ import {ResultMovies,SearchMovies} from '../services/Movie-API';
 import Form from '../components/Form';
 
 
-const MainPage = () => {
+const MainPage = ({prevWatchList}) => {
     //create state to hold movies through useState
     const [listOfNetflix, SetNetflixList] = useState([]);
     const [listOfCrave, SetCraveList] = useState([]);
     const [listOfDisney, SetDisneyList] = useState([]);
     const [listOfApplePlus, SetApplePlusList] = useState([]);
     const [movieToSearch, SetMoivesSearch] = useState([]);
+    const [watchedList, SetWatchedList] = useState(prevWatchList || []);
+
+    //set local storage function
+    const SetLocalStorage =(movie) =>{
+      //check local data prevWatchlist whether has movie or not
+      const prevWatchList = JSON.parse(localStorage.getItem("watchedMovies"));
+      var newWatchList = [];
+      if(!prevWatchList){
+        //situation1,storage is empty,new storage is array only movie
+        newWatchList = [movie];
+      }else if(prevWatchList.findIndex((m)=>m.id===movie.id)=== -1){
+        //sit 2,storage has many movies,check this movie is not in storage,add to prevwatchlist
+
+        newWatchList = [...prevWatchList,movie];
+      }else{
+        newWatchList=prevWatchList.filter((m)=>m.id !== movie.id);
+        //filter is picking 2 conditions.(m)is each movie in the list,if id is same,remove it.
+      }
+      localStorage.setItem("watchedMovies", JSON.stringify(newWatchList));
+    };
 
     //checkedmoviepart shortcut usf
     const initialWatchedMovies = JSON.parse(localStorage.getItem('watchedMovies'));
@@ -34,18 +54,25 @@ const MainPage = () => {
     localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies));
 
   }, [watchedMovies]);
-
+  
   //handle watched movie (checked)
-  const handleToggleWatchMovie = id => {
+  const handleToggleWatchMovie = (movie) => {
     // console.log("toggle movie", id);
     //add or remove the movie id to watchedMovies
-    setWatchedMovies(prevState =>{
-      if( prevState.findIndex(movieId => movieId=== id)=== -1) {
-        return [...prevState, id];// cuz push will modify state
-      }
-      return prevState.filter(movieId => movieId !== id);
-    });
-    // console.log(watchedMovies);
+    SetLocalStorage(movie);
+    setWatchedMovies(JSON.parse(localStorage.getItem("WatchList")));
+
+
+    //previous version red check was work
+    // const handleToggleWatchMovie = id => {
+    //   // console.log("toggle movie", id);
+    //   //add or remove the movie id to watchedMovies
+    //   setWatchedMovies(prevState =>{
+    //     if( prevState.findIndex(movieId => movieId=== id)=== -1) {
+    //       return [...prevState, id];// cuz push will modify state
+    //     }
+    //     return prevState.filter(movieId => movieId !== id);
+    //   });
   };
 
   var queryData =""; 
@@ -76,7 +103,7 @@ if (movieToSearch.length===0){
     <Form ResultMovies={handleSearch} />
     </Header>
     <MoviesList provider="results" movies={movieToSearch} 
-    watchedMovies={watchedMovies} toggleWatchMovie={handleToggleWatchMovie}/>
+    watchedMovies={watchedList} toggleWatchMovie={handleToggleWatchMovie}/>
     </>
   )
 }

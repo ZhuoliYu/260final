@@ -27,6 +27,7 @@ const Movie = ({movie,toggleWatchMovie,watched}) => {
           </div>
         
         </Link>
+        
         <div data-toggled={watched} className="listToggle">
           <div onClick={handleClick}>
             <i className="fa fa-fw fa-plus"></i>

@@ -15,6 +15,7 @@ const MoviesList = ({provider,movies,toggleWatchMovie,watchedMovies}) => {
                 ) === -1 
                 ? false
                 : true
+                //watched movie flase or true
                 }
               />
               

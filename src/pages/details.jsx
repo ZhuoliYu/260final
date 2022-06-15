@@ -3,55 +3,73 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import image from "../images/image-not-available.jpg";
 import Header from "../components/Header";
+import Form from "../components/Form";
 
-
-const DetailPage = () => {
+const DetailPage = ({addRemoveMovies}) => {
     const location = useLocation();//use location to locate data
     const movie = location.state.movie;
     const watched = location.state.watched;
+    const{id,title,overview,vote_average,poster_path} = movie;
+
+    //local storage
+    const SetLocalStorage =(movie) =>{
+      //check local data prevWatchlist whether has movie or not
+      const prevWatchList = JSON.parse(localStorage.getItem("watchedMovies"));
+      var newWatchList = [];
+      if(!prevWatchList){
+        //situation1,storage is empty,new storage is array only movie
+        newWatchList = [movie];
+      }else if(prevWatchList.findIndex((m)=>m.id===movie.id)=== -1){
+        //sit 2,storage has many movies,check this movie is not in storage,add to prevwatchlist
+
+        newWatchList = [...prevWatchList,movie];
+      }else{
+        newWatchList=prevWatchList.filter((m)=>m.id !== movie.id);
+        //filter is picking 2 conditions.(m)is each movie in the list,if id is same,remove it.
+      }
+      localStorage.setItem("watchedMovies", JSON.stringify(newWatchList));
+    };
 
     // const{id,title,overview,vote_average,poster_path} = movie;
 
-  //   var previousButtonState = "";
-  //   var previousButton = "";
+    var addRemoveMoviesButtonState = "";
+    var addRemoveMoviesButton = "";
 
-  //   if(watched){
-  //       previousButtonState = "remove-to-watchlist";
-  //       previousButton = "-Remove from watchlist";
-  //   } else {
-  //     previousButtonState="add-to-watchlist";
-  //     previousButton="+Add to watch list";
+    if(watched){
+        addRemoveMoviesButtonState = "remove-to-watchlist";
+        addRemoveMoviesButton = "-Remove from watchlist";
+    } else {
+      addRemoveMoviesButtonState="add-to-watchlist";
+      addRemoveMoviesButton="+Add to watch list";
 
-  //   }
+    }
     
-  //   const [buttonState, SetButtonState] = useState(previousButtonState);
-  //   const [button,SetButton] = useState(previousButton);
-  //   useEffect((prevButton) => {return(prevButton=buttonState==="add-to-watchlist" ? "+Add to watch list"
-  //   :"-Remove from watchlist");});
-  // };[buttonState];
+    const [buttonState, SetButtonState] = useState(addRemoveMoviesButtonState);
+    const [button,SetButton] = useState(addRemoveMoviesButton);
+    useEffect(()=>{
+    SetButton((prevButton) => {return(prevButton=buttonState==="add-to-watchlist" ? "+Add to watch list"
+    :"-Remove from watchlist");
+  });
+},[buttonState]);
 
-  // const handleClick =(event) => {
-  //   ;
-  // }
+  const handleClick = (event) => {
+    SetLocalStorage(movie);
+    SetButtonState((prevButtonStage) => {
+      return(prevButtonStage= prevButtonStage==="add-to-watchlist"?"remove-to-watchlist":"add-to-watchlist");
+
+    });
+  };
+
+//   useEffect(() => {
+//     localStorage.setItem('watchList', JSON.stringify(watchList))
+// }, [watchList])
 
   return (
     <>
-    <header className="header">
-    <a href="/">
-      <img src="https://fontmeme.com/permalink/190707/fd4735271a0d997cbe19a04408c896fc.png" 
-    alt="netflix-font" border="0" /></a>
-    <div id="navigation" className="navigation">
-      <nav>
-        <ul>
-          <li><a href="/my-watch-list">Watch List</a></li>
-        </ul>
-      </nav>
-    </div>
-    <form id="search" className="search">
-      <input type="search" placeholder="Search for a title..." />
-      <div className="searchResults"></div>
-    </form>
-  </header>
+        <Header>
+    <Form />
+    </Header>
+
 
   <div className="show-details">
   {/* Full size TV show posters from TMDB can be accessed with
@@ -62,11 +80,12 @@ const DetailPage = () => {
       <h1>{movie.name}</h1>
       <div className="description">{movie.overview}</div>
 
-      {/* <button onClick={handleClick} className={buttonState}></button> */}
-      
+      <button onClick={handleClick} className={[addRemoveMoviesButtonState]}>
+        {button}
+      </button>
     </div>
   </div>
   </>
  );
-};
+}; 
 export default DetailPage;
