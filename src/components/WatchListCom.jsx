@@ -1,7 +1,8 @@
+import Movie from "../components/Movie";
 import image from "../images/image-not-available.jpg";
 import {Link} from "react-router-dom";
 
-const Movie = ({movie,toggleWatchMovie,watched}) => {
+const WatchListCom = ({movie,toggleWatchMovie,watched}) => {
 
   const{id,title,overview,vote_average,poster_path} = movie;
   
@@ -15,7 +16,7 @@ const Movie = ({movie,toggleWatchMovie,watched}) => {
     return ( 
         <div className="movie">
           {/* set details page in a link, to is target url, state refers to data*/}
-          <Link to={`/details?${movie.id}`} state={{movie,watched}}>
+          <Link to={`/my-watch-list?${movie.id}`} state={{movie,watched}}>
             {/* movie is data, watched is checked button   */}
         
             <img src={movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`:image}
@@ -38,4 +39,4 @@ const Movie = ({movie,toggleWatchMovie,watched}) => {
      );
 }
  
-export default Movie;
+export default WatchListCom;

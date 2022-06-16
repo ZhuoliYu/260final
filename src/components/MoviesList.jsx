@@ -1,6 +1,7 @@
 import Movie from "../components/Movie";
-const MoviesList = ({provider,movies,toggleWatchMovie,watchedMovies}) => {
 
+const MoviesList = ({provider,movies,toggleWatchMovie,watchedMovies}) => {
+// console.log(watchedMovies)
     return ( 
         <div className="titleList">
         <div className="title">
@@ -10,8 +11,8 @@ const MoviesList = ({provider,movies,toggleWatchMovie,watchedMovies}) => {
             movies.map((movie)=>(
               <Movie key={movie.id} movie={movie} 
               toggleWatchMovie={toggleWatchMovie}
-              watched={watchedMovies.findIndex(
-                watchedMovieId => movie.id === watchedMovieId
+              watched={watchedMovies.findIndex( //
+                watchedMovie=> movie.id === watchedMovie.id
                 ) === -1 
                 ? false
                 : true
