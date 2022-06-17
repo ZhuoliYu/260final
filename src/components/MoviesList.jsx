@@ -1,4 +1,4 @@
-import Movie from "../components/Movie";
+import Movie from "./Movie";
 
 const MoviesList = ({provider,movies,toggleWatchMovie,watchedMovies}) => {
 // console.log(watchedMovies)

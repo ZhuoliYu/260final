@@ -1,18 +1,39 @@
-import WatchListCom from "../components/WatchListCom";
 import { useState, useEffect } from 'react';
+import Header from '../components/Header';
+import MoviesList from "../components/MoviesList";
+import Form from '../components/Form';
+import { ResultMovies, SearchMovies } from "../services/Movie-API";
 
 
-const WatchListPage = ({prevWatchList}) => {
+
+const WatchListPage = ({prevWatchList},) => {
   const [watchedList, SetWatchedList] = useState(prevWatchList || []);
-  
-    return ( 
+  const [movieToSearch, SetMoivesSearch] = useState([]);
+  const initialWatchedMovies = JSON.parse(localStorage.getItem("watchMovieList"));
+  const [watchedMovies, setWatchedMovies] = useState(
+    initialWatchedMovies || []
+  );
 
-      <WatchListCom 
-      // provider="results"
-      // movies={movieToSearch}
-      // watchedMovies={watchedMovies}
+  var queryData = "";
+  const handleSearch = (query) => {
+    queryData = query;
+    SearchMovies(query).then((movies) => SetMoivesSearch(movies.results));
+  };
+  
+    return (
+      <> 
+             <Header>
+          <Form ResultMovies={handleSearch} />
+          
+        </Header>
+      <MoviesList 
+      provider="watchList"
+      // movies={prevWatchList}
+      movies={prevWatchList}
       // toggleWatchMovie={handleToggleWatchMovie}
+      watchedMovies={prevWatchList}
       />
+      </>
 
     );
 }

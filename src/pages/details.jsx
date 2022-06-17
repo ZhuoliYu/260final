@@ -14,7 +14,7 @@ const DetailPage = ({addRemoveMovies}) => {
     //local storage
     const SetLocalStorage =(movie) =>{
       //check local data prevWatchlist whether has movie or not
-      const prevWatchList = JSON.parse(localStorage.getItem("watchedMovies"));
+      const prevWatchList = JSON.parse(localStorage.getItem("watchMovieList"));
       var newWatchList = [];
       if(!prevWatchList){
         //situation1,storage is empty,new storage is array only movie
@@ -27,7 +27,7 @@ const DetailPage = ({addRemoveMovies}) => {
         newWatchList=prevWatchList.filter((m)=>m.id !== movie.id);
         //filter is picking 2 conditions.(m)is each movie in the list,if id is same,remove it.
       }
-      localStorage.setItem("watchedMovies", JSON.stringify(newWatchList));
+      localStorage.setItem("watchMovieList", JSON.stringify(newWatchList));
     };
 
     // const{id,title,overview,vote_average,poster_path} = movie;
@@ -55,7 +55,8 @@ const DetailPage = ({addRemoveMovies}) => {
   const handleClick = (event) => {
     SetLocalStorage(movie);
     SetButtonState((prevButtonStage) => {
-      return(prevButtonStage= prevButtonStage==="add-to-watchlist"?"remove-to-watchlist":"add-to-watchlist");
+      return(prevButtonStage= prevButtonStage==="add-to-watchlist"?
+      "remove-to-watchlist":"add-to-watchlist");
 
     });
   };

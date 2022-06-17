@@ -8,15 +8,15 @@ import WatchListPage from './pages/watchlist';
 
 function App() {
    
-  const prevWatchList = JSON.parse(localStorage.getItem("WatchList"));
-
+  const prevWatchList = JSON.parse(localStorage.getItem("watchMovieList"));
+console.log(prevWatchList)
 
   return (
     <Router>
       <Routes>
         <Route path="/" element={<MainPage prevWatchList={prevWatchList} />} />
 
-        <Route path="/my-watch-list" 
+        <Route path="/my-watch-list"
         element={<WatchListPage prevWatchList={prevWatchList} />} />
 
         <Route path ={ `/details`} element ={<DetailPage prevWatchList={prevWatchList}/>} /> 
