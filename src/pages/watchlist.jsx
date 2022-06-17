@@ -13,6 +13,15 @@ const WatchListPage = ({prevWatchList},) => {
   const [watchedMovies, setWatchedMovies] = useState(
     initialWatchedMovies || []
   );
+  const handleToggleWatchMovie = (movie) => {
+    // console.log("toggle movie", id);
+    //add or remove the movie id to watchedMovies
+    // SetLocalStorage(movie); //watch movies data in localstorage
+    // console.log("success");
+    setWatchedMovies(JSON.parse(localStorage.getItem("watchMovieList")));
+
+   
+  };
 
   var queryData = "";
   const handleSearch = (query) => {
@@ -24,13 +33,13 @@ const WatchListPage = ({prevWatchList},) => {
       <> 
              <Header>
           <Form ResultMovies={handleSearch} />
-          
+
         </Header>
       <MoviesList 
       provider="watchList"
       // movies={prevWatchList}
       movies={prevWatchList}
-      // toggleWatchMovie={handleToggleWatchMovie}
+      toggleWatchMovie={handleToggleWatchMovie}
       watchedMovies={prevWatchList}
       />
       </>

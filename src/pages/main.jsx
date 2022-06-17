@@ -17,6 +17,7 @@ const MainPage = ({ prevWatchList }) => {
 
   //set local storage function
   const SetLocalStorage = (movie) => {
+    
     //check local data prevWatchlist whether has movie or not
     const prevWatchList = JSON.parse(localStorage.getItem("watchMovieList"));
     var newWatchList = [];
@@ -51,6 +52,8 @@ const MainPage = ({ prevWatchList }) => {
     ]); /*https://www.javascripttutorial.net/es6/javascript-promise-all/  
     4 functions, when call multiple API, to prevent one of them got error, 
     after finishing all items then return*/
+
+    // not repeat use effect and state
   }, []); //this should be changed depends on search movie, every movie serach change, it runs
 
   useEffect(() => {
@@ -126,7 +129,6 @@ const MainPage = ({ prevWatchList }) => {
           <Form ResultMovies={handleSearch} />
           
         </Header>
-
 
         <MoviesList
           provider="results"
